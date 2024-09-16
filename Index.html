@@ -7,165 +7,51 @@
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ... (previous styles remain the same) ... */
+
+        /* New styles for email and GitHub links */
+        .social-links {
+            margin-top: 1rem;
         }
 
-        :root {
-            --bg-color: #f4f4f4;
-            --text-color: #333;
-            --header-bg: #fe2c55;
-            --header-text: #fff;
-            --section-bg: #fff;
-            --section-shadow: rgba(0, 0, 0, 0.1);
-            --project-bg: #f9f9f9;
-            --project-hover: #eaeaea;
-            --icon-color: #fe2c55;
+        .social-links a {
+            color: var(--header-text);
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .dark-mode {
-            --bg-color: #1a1a1a;
-            --text-color: #f4f4f4;
-            --header-bg: #b3203d;
-            --header-text: #fff;
-            --section-bg: #2a2a2a;
-            --section-shadow: rgba(255, 255, 255, 0.1);
-            --project-bg: #333;
-            --project-hover: #444;
-            --icon-color: #ff6b81;
+        .social-links a:hover {
+            color: var(--project-hover);
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Header styles */
-        header {
+        /* Game link styles */
+        .game-link {
             background-color: var(--header-bg);
             color: var(--header-text);
-            text-align: center;
-            padding: 2rem 0;
-            animation: fadeIn 1s ease-in-out;
-            position: relative;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Main content styles */
-        main {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        section {
-            background-color: var(--section-bg);
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 5px var(--section-shadow);
-            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
-        }
-
-        section:hover {
-            transform: translateY(-5px);
-        }
-
-        h2 {
-            color: var(--header-bg);
-            margin-bottom: 1rem;
-        }
-
-        /* Project list styles */
-        .project-list {
-            list-style-type: none;
-        }
-
-        .project-list li {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: var(--project-bg);
-            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
             transition: background-color 0.3s ease;
         }
 
-        .project-list li:hover {
-            background-color: var(--project-hover);
-        }
-
-        .project-list a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .project-list a:hover {
-            color: var(--header-bg);
-        }
-
-        /* Button styles */
-        .cta-button {
-            display: inline-block;
-            background-color: var(--header-bg);
-            color: var(--header-text);
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .cta-button:hover {
+        .game-link:hover {
             background-color: #e62a4d;
         }
 
-        /* Dark mode toggle */
-        .dark-mode-toggle {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: var(--section-bg);
-            color: var(--text-color);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+        /* Scroll animation styles */
+        .hidden {
+            opacity: 0;
+            filter: blur(5px);
+            transform: translateX(-100%);
+            transition: all 1s;
         }
 
-        .dark-mode-toggle:hover {
-            background-color: var(--project-hover);
-        }
-
-        /* Icon styles */
-        .icon {
-            color: var(--icon-color);
-            margin-right: 0.5rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .animate-slide-in {
-            animation: slideIn 0.5s ease-out forwards;
+        .show {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -173,16 +59,20 @@
     <header>
         <h1><i class="fab fa-tiktok icon"></i>Welcome to My TikTok Homepage</h1>
         <p>Discover my latest videos and projects!</p>
+        <div class="social-links">
+            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/yourusername"><i class="fab fa-github"></i></a>
+        </div>
         <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon icon"></i><span>Toggle Dark Mode</span></button>
     </header>
 
     <main>
-        <section id="about" class="animate-slide-in">
+        <section id="about" class="hidden">
             <h2><i class="fas fa-user icon"></i>About Me</h2>
             <p>Hey there! I'm a content creator passionate about [your niche]. Follow me for daily entertainment and inspiration!</p>
         </section>
 
-        <section id="projects" class="animate-slide-in">
+        <section id="projects" class="hidden">
             <h2><i class="fas fa-project-diagram icon"></i>My Projects</h2>
             <ul class="project-list">
                 <li><i class="fas fa-star icon"></i><a href="#project1">Project 1</a> - Short description of project 1</li>
@@ -191,7 +81,13 @@
             </ul>
         </section>
 
-        <section id="cta" class="animate-slide-in">
+        <section id="game" class="hidden">
+            <h2><i class="fas fa-gamepad icon"></i>Play My Game</h2>
+            <p>Take a break and enjoy a simple game I created!</p>
+            <a href="game.html" class="game-link">Play Now</a>
+        </section>
+
+        <section id="cta" class="hidden">
             <h2><i class="fas fa-video icon"></i>Follow Me on TikTok</h2>
             <p>Don't miss out on my latest content! Click the button below to visit my TikTok profile.</p>
             <a href="https://www.tiktok.com/@yourusername" class="cta-button"><i class="fab fa-tiktok icon"></i>Visit My TikTok</a>
@@ -200,27 +96,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('.animate-slide-in');
             const darkModeToggle = document.getElementById('darkModeToggle');
             
-            const observerOptions = {
-                threshold: 0.1
-            };
-
+            // Scroll animation
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+                entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.classList.add('show');
+                    } else {
+                        entry.target.classList.remove('show');
                     }
                 });
-            }, observerOptions);
-
-            sections.forEach(section => {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(50px)';
-                observer.observe(section);
             });
+
+            const hiddenElements = document.querySelectorAll('.hidden');
+            hiddenElements.forEach((el) => observer.observe(el));
 
             // Dark mode functionality
             function toggleDarkMode() {
