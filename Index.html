@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7julian8's Homepage</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --header-bg: #fe2c55;
+            --header-text: #fff;
+            --section-bg: #fff;
+            --section-shadow: rgba(0, 0, 0, 0.1);
+            --project-bg: #f9f9f9;
+            --project-hover: #eaeaea;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f4f4f4;
+            --header-bg: #b3203d;
+            --header-text: #fff;
+            --section-bg: #2a2a2a;
+            --section-shadow: rgba(255, 255, 255, 0.1);
+            --project-bg: #333;
+            --project-hover: #444;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header styles */
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            text-align: center;
+            padding: 2rem 0;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Main content styles */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background-color: var(--section-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px var(--section-shadow);
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--header-bg);
+            margin-bottom: 1rem;
+        }
+
+        /* Project list styles */
+        .project-list {
+            list-style-type: none;
+        }
+
+        .project-list li {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: var(--project-bg);
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .project-list li:hover {
+            background-color: var(--project-hover);
+        }
+
+        .project-list a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .project-list a:hover {
+            color: var(--header-bg);
+        }
+
+        /* Button styles */
+        .cta-button {
+            display: inline-block;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #e62a4d;
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--section-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: var(--project-hover);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Redmi 5 Plus Hype</h1>
+        <p>My Homepage</p>
+        <button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+    </header>
+
+    <main>
+        <section id="about" class="animate-slide-in">
+            <h2>About Me</h2>
+            <p>Hi, i am Julian! Self called techtoker. I am making Videos about Linux, Phones, Android and some memes. I would appreashate it if you could follow me on TikTok!</p>
+        </section>
+
+        <section id="projects" class="animate-slide-in">
+            <h2>My Projects</h2>
+            <ul class="project-list">
+                <li><a href="#project1">KingOS</a> - A FigmaOS made by me </li>
+            </ul>
+        </section>
+
+        <section id="cta" class="animate-slide-in">
+            <h2>Follow Me on TikTok</h2>
+            <p>Don't miss out on my latest content! Click the button below to visit my TikTok profile.</p>
+            <a href="https://www.tiktok.com/@_7julian8_" class="cta-button">Visit My TikTok</a>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.animate-slide-in');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(50px)';
+                observer.observe(section);
+            });
+
+            // Dark mode functionality
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                updateDarkModeButtonText();
+            }
+
+            function updateDarkModeButtonText() {
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                darkModeToggle.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+            }
+
+            // Check for user's preference
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+
+            updateDarkModeButtonText();
+
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+        });
+    </script>
+</body>
+</html>
