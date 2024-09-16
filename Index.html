@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7julian8's Homepage</title>
+    <title>My TikTok Homepage</title>
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset and base styles */
         * {
@@ -21,6 +23,7 @@
             --section-shadow: rgba(0, 0, 0, 0.1);
             --project-bg: #f9f9f9;
             --project-hover: #eaeaea;
+            --icon-color: #fe2c55;
         }
 
         .dark-mode {
@@ -32,6 +35,7 @@
             --section-shadow: rgba(255, 255, 255, 0.1);
             --project-bg: #333;
             --project-hover: #444;
+            --icon-color: #ff6b81;
         }
 
         body {
@@ -143,6 +147,12 @@
             background-color: var(--project-hover);
         }
 
+        /* Icon styles */
+        .icon {
+            color: var(--icon-color);
+            margin-right: 0.5rem;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -161,28 +171,30 @@
 </head>
 <body>
     <header>
-        <h1>Redmi 5 Plus Hype</h1>
-        <p>My Homepage</p>
-        <button class="dark-mode-toggle" id="darkModeToggle">Dark Mode</button>
+        <h1><i class="fab fa-tiktok icon"></i>Welcome to My TikTok Homepage</h1>
+        <p>Discover my latest videos and projects!</p>
+        <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon icon"></i><span>Toggle Dark Mode</span></button>
     </header>
 
     <main>
         <section id="about" class="animate-slide-in">
-            <h2>About Me</h2>
-            <p>Hi, i am Julian! Self called techtoker. I am making Videos about Linux, Phones, Android and some memes. I would appreashate it if you could follow me on TikTok!</p>
+            <h2><i class="fas fa-user icon"></i>About Me</h2>
+            <p>Hey there! I'm a content creator passionate about [your niche]. Follow me for daily entertainment and inspiration!</p>
         </section>
 
         <section id="projects" class="animate-slide-in">
-            <h2>My Projects</h2>
+            <h2><i class="fas fa-project-diagram icon"></i>My Projects</h2>
             <ul class="project-list">
-                <li><a href="#project1">KingOS</a> - A FigmaOS made by me </li>
+                <li><i class="fas fa-star icon"></i><a href="#project1">Project 1</a> - Short description of project 1</li>
+                <li><i class="fas fa-star icon"></i><a href="#project2">Project 2</a> - Short description of project 2</li>
+                <li><i class="fas fa-star icon"></i><a href="#project3">Project 3</a> - Short description of project 3</li>
             </ul>
         </section>
 
         <section id="cta" class="animate-slide-in">
-            <h2>Follow Me on TikTok</h2>
+            <h2><i class="fas fa-video icon"></i>Follow Me on TikTok</h2>
             <p>Don't miss out on my latest content! Click the button below to visit my TikTok profile.</p>
-            <a href="https://www.tiktok.com/@_7julian8_" class="cta-button">Visit My TikTok</a>
+            <a href="https://www.tiktok.com/@yourusername" class="cta-button"><i class="fab fa-tiktok icon"></i>Visit My TikTok</a>
         </section>
     </main>
 
@@ -220,7 +232,15 @@
 
             function updateDarkModeButtonText() {
                 const isDarkMode = document.body.classList.contains('dark-mode');
-                darkModeToggle.textContent = isDarkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+                const iconElement = darkModeToggle.querySelector('i');
+                const textElement = darkModeToggle.querySelector('span');
+                if (isDarkMode) {
+                    iconElement.className = 'fas fa-sun icon';
+                    textElement.textContent = 'Toggle Light Mode';
+                } else {
+                    iconElement.className = 'fas fa-moon icon';
+                    textElement.textContent = 'Toggle Dark Mode';
+                }
             }
 
             // Check for user's preference
