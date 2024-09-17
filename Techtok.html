@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechTok Wiki</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --header-color: #fff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--header-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header #branding h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        header nav li {
+            margin-left: 20px;
+        }
+
+        header a {
+            color: var(--header-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        header a:hover {
+            opacity: 0.8;
+        }
+
+        .article {
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .article:hover {
+            transform: translateY(-5px);
+        }
+
+        .article h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .dark-mode {
+            --primary-color: #2980b9;
+            --secondary-color: #34495e;
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --header-color: #ecf0f1;
+            --border-color: #4a6572;
+        }
+
+        .dark-mode .article {
+            background: var(--secondary-color);
+        }
+
+        #moderationPanel {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .dark-mode #moderationPanel {
+            background: var(--secondary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .dark-mode button {
+            background-color: #3498db;
+        }
+
+        .dark-mode button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>TechTok Wiki</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" id="darkModeToggle">Toggle Dark Mode</a></li>
+                    <li><a href="#" id="addArticleBtn">Add Article</a></li>
+                    <li><a href="#" id="moderationBtn">Moderation</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container" id="content">
+        <!-- Wiki content will be dynamically added here -->
+    </div>
+
+    <div id="moderationPanel" class="container">
+        <h2>Moderation Panel</h2>
+        <div id="pendingArticles"></div>
+    </div>
+
+    <script>
+        // Sample initial wiki data
+        let wikiData = [
+            { id: 1, title: "JavaScript", content: "JavaScript is a programming language..." },
+            { id: 2, title: "Python", content: "Python is a versatile programming language..." }
+        ];
+
+        let pendingArticles = [];
+
+        const content = document.getElementById('content');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const addArticleBtn = document.getElementById('addArticleBtn');
+        const moderationBtn = document.getElementById('moderationBtn');
+        const moderationPanel = document.getElementById('moderationPanel');
+        const pendingArticlesDiv = document.getElementById('pendingArticles');
+
+        // Function to render wiki articles
+        function renderArticles() {
+            content.innerHTML = '';
+            wikiData.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.classList.add('article');
+                articleDiv.innerHTML = `
+                    <h2>${article.title}</h2>
+                    <p>${article.content}</p>
+                `;
+                content.appendChild(articleDiv);
+            });
+        }
+
+        // Function to add a new article
+        function addArticle() {
+            const title = prompt("Enter article title:");
+            const content = prompt("Enter article content:");
+            if (title && content) {
+                const newArticle = { id: wikiData.length + 1, title, content };
+                pendingArticles.push(newArticle);
+                alert("Your article has been submitted for moderation.");
+            }
+        }
+
+        // Function to render pending articles in moderation panel
+        function renderPendingArticles() {
+            pendingArticlesDiv.innerHTML = '';
+            pendingArticles.forEach((article, index) => {
+                const articleDiv = document.createElement('div');
+                articleDiv.classList.add('article');
+                articleDiv.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <p>${article.content}</p>
+                    <button onclick="approveArticle(${index})">Approve</button>
+                    <button onclick="rejectArticle(${index})">Reject</button>
+                `;
+                pendingArticlesDiv.appendChild(articleDiv);
+            });
+        }
+
+        // Function to approve an article
+        function approveArticle(index) {
+            const article = pendingArticles[index];
+            wikiData.push(article);
+            pendingArticles.splice(index, 1);
+            renderPendingArticles();
+            renderArticles();
+        }
+
+        // Function to reject an article
+        function rejectArticle(index) {
+            pendingArticles.splice(index, 1);
+            renderPendingArticles();
+        }
+
+        // Event Listeners
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        addArticleBtn.addEventListener('click', addArticle);
+
+        moderationBtn.addEventListener('click', () => {
+            // In a real application, you would check the IP address here
+            const moderatorIP = prompt("Enter moderator IP:");
+            if (moderatorIP === "123.456.789.0") { // Replace with actual moderator IP
+                moderationPanel.style.display = moderationPanel.style.display === 'none' ? 'block' : 'none';
+                renderPendingArticles();
+            } else {
+                alert("You don't have permission to access the moderation panel.");
+            }
+        });
+
+        // Initial render
+        renderArticles();
+    </script>
+</body>
+</html>
