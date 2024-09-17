@@ -18,6 +18,7 @@
             background-color: #333;
             color: #fff;
             padding: 1em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         header h1 {
@@ -28,10 +29,11 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            justify-content: space-between;
         }
 
         nav ul li {
-            display: inline;
             margin-right: 10px;
         }
 
@@ -41,16 +43,12 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 0;
-        }
-
-        nav ul li button {
-            background-color: #444;
+            padding: 10px;
             border-radius: 5px;
-            padding: 5px 10px;
+            transition: background-color 0.3s;
         }
 
-        nav ul li button:hover {
+        nav ul li a:hover, nav ul li button:hover {
             background-color: #555;
         }
 
@@ -79,6 +77,12 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        #editor:focus {
+            border-color: #007bff;
+            outline: none;
         }
 
         .editor-buttons {
@@ -87,10 +91,11 @@
 
         .editor-buttons button {
             margin-right: 10px;
-            padding: 5px 10px;
+            padding: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .editor-buttons button:hover {
@@ -113,10 +118,18 @@
             border: 1px solid #ccc;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             z-index: 1000;
+            transition: opacity 0.3s, transform 0.3s;
         }
 
-        #moderation-popup h2 {
-            margin-top: 0;
+        #moderation-popup.show {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #moderation-popup.hide {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20%);
         }
 
         #moderation-content {
@@ -133,6 +146,12 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .post:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .post h3 {
@@ -141,6 +160,33 @@
 
         .post p {
             margin-bottom: 0;
+        }
+
+        .tabs {
+            display: flex;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px;
+            margin-right: 5px;
+            background-color: #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.show {
+            display: block;
         }
     </style>
 </head>
@@ -160,16 +206,23 @@
     </header>
 
     <main>
-        <div id="content">
-            <!-- Content will be dynamically loaded here -->
+        <div id="tabs-container" class="tabs">
+            <div class="tab active" onclick="showTab('all-posts')">All Posts</div>
+            <div class="tab" onclick="showTab('create-post')">Create Post</div>
         </div>
 
-        <div id="editor-container">
-            <h2>Create a Post</h2>
-            <textarea id="editor" placeholder="Write your post here..."></textarea>
-            <div class="editor-buttons">
-                <button onclick="savePost()">Save Post</button>
-                <button onclick="clearEditor()">Clear</button>
+        <div id="all-posts" class="tab-content show">
+            <div id="posts-list"></div>
+        </div>
+
+        <div id="create-post" class="tab-content">
+            <div id="editor-container">
+                <h2>Create a Post</h2>
+                <textarea id="editor" placeholder="Write your post here..."></textarea>
+                <div class="editor-buttons">
+                    <button onclick="savePost()">Save Post</button>
+                    <button onclick="clearEditor()">Clear</button>
+                </div>
             </div>
         </div>
     </main>
@@ -204,7 +257,7 @@
                     content = '<h2>About TechTok Wiki</h2><p>This wiki is a collaborative platform for TechTok enthusiasts.</p>';
                     break;
                 case 'contribute':
-                    content = '<h2>Contribute</h2><p>Learn how you can contribute to the TechTok Wiki.</p><button onclick="showEditor()">Create a Post</button>';
+                    content = '<h2>Contribute</h2><p>Learn how you can contribute to the TechTok Wiki.</p><button onclick="showTab(\'create-post\')">Create a Post</button>';
                     break;
                 case 'search':
                     content = '<h2>Search</h2><input type="text" id="search-input" placeholder="Search..."><div id="search-results"></div>';
@@ -217,7 +270,7 @@
                     });
                     break;
             }
-            document.getElementById('content').innerHTML = content;
+            document.getElementById('posts-list').innerHTML = content;
         }
 
         function toggleDarkMode() {
@@ -226,7 +279,15 @@
         }
 
         function openModeration() {
-            document.getElementById('moderation-popup').style.display = 'block';
+            const popup = document.getElementById('moderation-popup');
+            popup.classList.remove('hide');
+            popup.classList.add('show');
+        }
+
+        function closeModeration() {
+            const popup = document.getElementById('moderation-popup');
+            popup.classList.remove('show');
+            popup.classList.add('hide');
         }
 
         function checkPassword() {
@@ -255,15 +316,21 @@
         }
 
         function approvePost(index) {
-            // Approve the post (for demo purposes, we'll just remove it from the pending list)
             posts.splice(index, 1);
             displayPendingPosts();
         }
 
         function rejectPost(index) {
-            // Reject the post (for demo purposes, we'll just remove it from the pending list)
             posts.splice(index, 1);
             displayPendingPosts();
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('show'));
+
+            document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('show');
         }
 
         function showEditor() {
@@ -274,7 +341,7 @@
             const postContent = document.getElementById('editor').value.trim();
             if (postContent) {
                 posts.push(postContent); // Add post to the pending list
-                document.getElementById('content').innerHTML = `<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>`;
+                document.getElementById('posts-list').innerHTML = '<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>';
                 clearEditor();
             }
         }
@@ -286,5 +353,6 @@
     </script>
 </body>
 </html>
+
 
 
