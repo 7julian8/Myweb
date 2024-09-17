@@ -231,7 +231,7 @@
         <p>&copy; 2024 TechTok Wiki</p>
     </footer>
 
-    <div id="moderation-popup">
+    <div id="moderation-popup" class="hide">
         <h2>Moderation</h2>
         <input type="password" id="moderation-password" placeholder="Enter password">
         <button onclick="checkPassword()">Submit</button>
@@ -240,6 +240,7 @@
             <h3>Pending Posts</h3>
             <div id="pending-posts"></div>
         </div>
+        <button onclick="closeModeration()">Close</button>
     </div>
 
     <script>
@@ -333,16 +334,13 @@
             document.getElementById(tabId).classList.add('show');
         }
 
-        function showEditor() {
-            document.getElementById('editor-container').style.display = 'block';
-        }
-
         function savePost() {
             const postContent = document.getElementById('editor').value.trim();
             if (postContent) {
                 posts.push(postContent); // Add post to the pending list
                 document.getElementById('posts-list').innerHTML = '<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>';
                 clearEditor();
+                showTab('all-posts');
             }
         }
 
@@ -350,9 +348,15 @@
             document.getElementById('editor').value = '';
             document.getElementById('editor-container').style.display = 'none';
         }
+
+        // Show the editor when "Create Post" tab is clicked
+        document.querySelector('.tab[onclick="showTab(\'create-post\')"]').addEventListener('click', function() {
+            document.getElementById('editor-container').style.display = 'block';
+        });
     </script>
 </body>
 </html>
+
 
 
 
