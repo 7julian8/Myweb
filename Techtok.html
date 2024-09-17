@@ -260,6 +260,10 @@
             } else {
                 document.getElementById('editor-container').style.display = 'none';
             }
+
+            if (tabId === 'all-posts') {
+                displayPosts();
+            }
         }
 
         function toggleDarkMode() {
@@ -326,13 +330,22 @@
 
         function clearEditor() {
             document.getElementById('editor').value = '';
-            document.getElementById('editor-container').style.display = 'none';
+        }
+
+        function displayPosts() {
+            const postsListContainer = document.getElementById('posts-list');
+            postsListContainer.innerHTML = posts.length > 0
+                ? posts.map((post, index) => `
+                    <div class="post">
+                        <h3>Post #${index + 1}</h3>
+                        <p>${post}</p>
+                    </div>
+                `).join('')
+                : '<p>No posts available.</p>';
         }
     </script>
 </body>
 </html>
-
-
 
 
 
