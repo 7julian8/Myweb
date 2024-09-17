@@ -10,6 +10,8 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.3s, color 0.3s;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
         header, footer {
@@ -25,6 +27,7 @@
         nav ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         nav ul li {
@@ -32,9 +35,23 @@
             margin-right: 10px;
         }
 
-        nav ul li a {
+        nav ul li a, nav ul li button {
             color: #fff;
             text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        nav ul li button {
+            background-color: #444;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        nav ul li button:hover {
+            background-color: #555;
         }
 
         main {
@@ -52,11 +69,16 @@
 
         #editor-container {
             margin-top: 20px;
+            display: none;
         }
 
         #editor {
             width: 100%;
             height: 200px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
 
         .editor-buttons {
@@ -65,10 +87,60 @@
 
         .editor-buttons button {
             margin-right: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        #content {
+        .editor-buttons button:hover {
+            background-color: #ddd;
+        }
+
+        .editor-buttons button:active {
+            background-color: #ccc;
+        }
+
+        #moderation-popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        #moderation-popup h2 {
+            margin-top: 0;
+        }
+
+        #moderation-content {
+            display: none;
+        }
+
+        #search-results {
             margin-top: 20px;
+        }
+
+        .post {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .post h3 {
+            margin-top: 0;
+        }
+
+        .post p {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -92,7 +164,7 @@
             <!-- Content will be dynamically loaded here -->
         </div>
 
-        <div id="editor-container" style="display: none;">
+        <div id="editor-container">
             <h2>Create a Post</h2>
             <textarea id="editor" placeholder="Write your post here..."></textarea>
             <div class="editor-buttons">
@@ -106,20 +178,21 @@
         <p>&copy; 2024 TechTok Wiki</p>
     </footer>
 
-    <div id="moderation-popup" style="display: none;">
+    <div id="moderation-popup">
         <h2>Moderation</h2>
         <input type="password" id="moderation-password" placeholder="Enter password">
         <button onclick="checkPassword()">Submit</button>
         <p id="moderation-error" style="color: red; display: none;">Incorrect password</p>
-        <div id="moderation-content" style="display: none;">
-            <h3>Moderator Actions</h3>
-            <!-- Moderator actions go here -->
+        <div id="moderation-content">
+            <h3>Pending Posts</h3>
+            <div id="pending-posts"></div>
         </div>
     </div>
 
     <script>
         const base64Password = "dGVjaHRvaw=="; // Base64 for "techtok"
         let darkMode = false;
+        let posts = []; // Array to store posts before moderation
 
         function showContent(page) {
             let content = '';
@@ -137,7 +210,10 @@
                     content = '<h2>Search</h2><input type="text" id="search-input" placeholder="Search..."><div id="search-results"></div>';
                     document.getElementById('search-input').addEventListener('input', function() {
                         const query = this.value.toLowerCase();
-                        document.getElementById('search-results').innerHTML = `Results for "${query}" will be shown here.`;
+                        document.getElementById('search-results').innerHTML = posts
+                            .filter(post => post.toLowerCase().includes(query))
+                            .map(post => `<div class="post"><p>${post}</p></div>`)
+                            .join('');
                     });
                     break;
             }
@@ -159,9 +235,35 @@
             if (inputPassword === decodedPassword) {
                 document.getElementById('moderation-content').style.display = 'block';
                 document.getElementById('moderation-error').style.display = 'none';
+                displayPendingPosts();
             } else {
                 document.getElementById('moderation-error').style.display = 'block';
             }
+        }
+
+        function displayPendingPosts() {
+            const pendingPostsContainer = document.getElementById('pending-posts');
+            pendingPostsContainer.innerHTML = posts
+                .map((post, index) => `
+                    <div class="post">
+                        <h3>Post #${index + 1}</h3>
+                        <p>${post}</p>
+                        <button onclick="approvePost(${index})">Approve</button>
+                        <button onclick="rejectPost(${index})">Reject</button>
+                    </div>
+                `).join('');
+        }
+
+        function approvePost(index) {
+            // Approve the post (for demo purposes, we'll just remove it from the pending list)
+            posts.splice(index, 1);
+            displayPendingPosts();
+        }
+
+        function rejectPost(index) {
+            // Reject the post (for demo purposes, we'll just remove it from the pending list)
+            posts.splice(index, 1);
+            displayPendingPosts();
         }
 
         function showEditor() {
@@ -169,9 +271,10 @@
         }
 
         function savePost() {
-            const postContent = document.getElementById('editor').value;
-            if (postContent.trim()) {
-                document.getElementById('content').innerHTML = `<h2>New Post</h2><p>${postContent}</p>`;
+            const postContent = document.getElementById('editor').value.trim();
+            if (postContent) {
+                posts.push(postContent); // Add post to the pending list
+                document.getElementById('content').innerHTML = `<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>`;
                 clearEditor();
             }
         }
@@ -183,4 +286,5 @@
     </script>
 </body>
 </html>
+
 
