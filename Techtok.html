@@ -246,7 +246,15 @@
     <script>
         const base64Password = "dGVjaHRvaw=="; // Base64 for "techtok"
         let darkMode = false;
-        let posts = []; // Array to store posts before moderation
+
+        function loadPosts() {
+            const savedPosts = localStorage.getItem('posts');
+            return savedPosts ? JSON.parse(savedPosts) : [];
+        }
+
+        function savePosts(posts) {
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
 
         function showTab(tabId) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -296,6 +304,7 @@
         }
 
         function displayPendingPosts() {
+            const posts = loadPosts();
             const pendingPostsContainer = document.getElementById('pending-posts');
             pendingPostsContainer.innerHTML = posts
                 .map((post, index) => `
@@ -309,19 +318,25 @@
         }
 
         function approvePost(index) {
+            const posts = loadPosts();
             posts.splice(index, 1);
+            savePosts(posts);
             displayPendingPosts();
         }
 
         function rejectPost(index) {
+            const posts = loadPosts();
             posts.splice(index, 1);
+            savePosts(posts);
             displayPendingPosts();
         }
 
         function savePost() {
             const postContent = document.getElementById('editor').value.trim();
             if (postContent) {
+                const posts = loadPosts();
                 posts.push(postContent); // Add post to the pending list
+                savePosts(posts);
                 document.getElementById('posts-list').innerHTML = '<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>';
                 clearEditor();
                 showTab('all-posts');
@@ -334,6 +349,7 @@
 
         function displayPosts() {
             const postsListContainer = document.getElementById('posts-list');
+            const posts = loadPosts();
             postsListContainer.innerHTML = posts.length > 0
                 ? posts.map((post, index) => `
                     <div class="post">
@@ -343,9 +359,13 @@
                 `).join('')
                 : '<p>No posts available.</p>';
         }
+
+        // Initialize the page by loading posts
+        displayPosts();
     </script>
 </body>
 </html>
+
 
 
 
