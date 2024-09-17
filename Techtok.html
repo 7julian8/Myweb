@@ -212,6 +212,10 @@
         </div>
 
         <div id="all-posts" class="tab-content show">
+            <div id="search-bar">
+                <input type="text" id="search-input" placeholder="Search posts..." onkeyup="searchPosts()">
+                <div id="search-results"></div>
+            </div>
             <div id="posts-list"></div>
         </div>
 
@@ -246,7 +250,7 @@
     <script>
         const base64Password = "dGVjaHRvaw=="; // Base64 for "techtok"
         let darkMode = false;
-
+        
         function loadPosts() {
             const savedPosts = localStorage.getItem('posts');
             return savedPosts ? JSON.parse(savedPosts) : [];
@@ -335,7 +339,7 @@
             const postContent = document.getElementById('editor').value.trim();
             if (postContent) {
                 const posts = loadPosts();
-                posts.push(postContent); // Add post to the pending list
+                posts.push(postContent); // Add post to the list
                 savePosts(posts);
                 document.getElementById('posts-list').innerHTML = '<h2>Post Submitted</h2><p>Your post is awaiting moderation.</p>';
                 clearEditor();
@@ -358,6 +362,22 @@
                     </div>
                 `).join('')
                 : '<p>No posts available.</p>';
+        }
+
+        function searchPosts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const posts = loadPosts();
+            const filteredPosts = posts.filter(post => post.toLowerCase().includes(searchTerm));
+            
+            const searchResultsContainer = document.getElementById('search-results');
+            searchResultsContainer.innerHTML = filteredPosts.length > 0
+                ? filteredPosts.map((post, index) => `
+                    <div class="post">
+                        <h3>Post #${index + 1}</h3>
+                        <p>${post}</p>
+                    </div>
+                `).join('')
+                : '<p>No results found.</p>';
         }
 
         // Initialize the page by loading posts
