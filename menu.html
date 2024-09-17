@@ -120,6 +120,7 @@
 
         // Handle keyboard input
         document.addEventListener('keydown', (e) => {
+            e.preventDefault();  // Prevent default browser behavior (like zoom or scroll)
             if (e.key === 'ArrowLeft') {
                 leftPressed = true;
             }
@@ -132,6 +133,7 @@
         });
 
         document.addEventListener('keyup', (e) => {
+            e.preventDefault();  // Prevent default browser behavior
             if (e.key === 'ArrowLeft') {
                 leftPressed = false;
             }
@@ -174,5 +176,6 @@
     </script>
 </body>
 </html>
+
 
 
