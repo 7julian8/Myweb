@@ -195,10 +195,10 @@
         <h1>TechTok Wiki</h1>
         <nav>
             <ul>
-                <li><a href="#" onclick="showContent('home')">Home</a></li>
-                <li><a href="#" onclick="showContent('about')">About</a></li>
-                <li><a href="#" onclick="showContent('contribute')">Contribute</a></li>
-                <li><a href="#" onclick="showContent('search')">Search</a></li>
+                <li><a href="#" onclick="showTab('home')">Home</a></li>
+                <li><a href="#" onclick="showTab('about')">About</a></li>
+                <li><a href="#" onclick="showTab('contribute')">Contribute</a></li>
+                <li><a href="#" onclick="showTab('search')">Search</a></li>
                 <li><button onclick="toggleDarkMode()">Toggle Dark Mode</button></li>
                 <li><button onclick="openModeration()">Moderation</button></li>
             </ul>
@@ -248,30 +248,18 @@
         let darkMode = false;
         let posts = []; // Array to store posts before moderation
 
-        function showContent(page) {
-            let content = '';
-            switch(page) {
-                case 'home':
-                    content = '<h2>Welcome to the TechTok Wiki</h2><p>Find information about TechTok topics here.</p>';
-                    break;
-                case 'about':
-                    content = '<h2>About TechTok Wiki</h2><p>This wiki is a collaborative platform for TechTok enthusiasts.</p>';
-                    break;
-                case 'contribute':
-                    content = '<h2>Contribute</h2><p>Learn how you can contribute to the TechTok Wiki.</p><button onclick="showTab(\'create-post\')">Create a Post</button>';
-                    break;
-                case 'search':
-                    content = '<h2>Search</h2><input type="text" id="search-input" placeholder="Search..."><div id="search-results"></div>';
-                    document.getElementById('search-input').addEventListener('input', function() {
-                        const query = this.value.toLowerCase();
-                        document.getElementById('search-results').innerHTML = posts
-                            .filter(post => post.toLowerCase().includes(query))
-                            .map(post => `<div class="post"><p>${post}</p></div>`)
-                            .join('');
-                    });
-                    break;
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('show'));
+
+            document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('show');
+
+            if (tabId === 'create-post') {
+                document.getElementById('editor-container').style.display = 'block';
+            } else {
+                document.getElementById('editor-container').style.display = 'none';
             }
-            document.getElementById('posts-list').innerHTML = content;
         }
 
         function toggleDarkMode() {
@@ -326,14 +314,6 @@
             displayPendingPosts();
         }
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('show'));
-
-            document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('show');
-        }
-
         function savePost() {
             const postContent = document.getElementById('editor').value.trim();
             if (postContent) {
@@ -348,14 +328,10 @@
             document.getElementById('editor').value = '';
             document.getElementById('editor-container').style.display = 'none';
         }
-
-        // Show the editor when "Create Post" tab is clicked
-        document.querySelector('.tab[onclick="showTab(\'create-post\')"]').addEventListener('click', function() {
-            document.getElementById('editor-container').style.display = 'block';
-        });
     </script>
 </body>
 </html>
+
 
 
 
