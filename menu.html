@@ -28,6 +28,13 @@
             font-weight: bold;
             color: black;
         }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -37,6 +44,7 @@
         <div class="button" id="shoot-btn">Shoot</div>
         <div class="button" id="right-btn">→</div>
     </div>
+    <div id="score">Score: 0</div>
 
     <script>
         // Canvas setup
@@ -53,6 +61,7 @@
         let isShooting = false;
         let leftPressed = false;
         let rightPressed = false;
+        let score = 0;  // Score variable
 
         // Helper functions
         function drawRect(x, y, w, h, color) {
@@ -67,6 +76,10 @@
         function spawnEnemy() {
             const enemyX = Math.random() * (width - 50);
             enemies.push({ x: enemyX, y: 0, width: 50, height: 50 });
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = `Score: ${score}`;
         }
 
         function update() {
@@ -103,6 +116,10 @@
                         bullet.y < enemy.y + enemy.height && bullet.y + bullet.height > enemy.y) {
                         enemies.splice(index, 1);
                         bullets.splice(bulletIndex, 1);
+
+                        // Increase score when enemy is hit
+                        score++;
+                        updateScore();  // Update the displayed score
                     }
                 });
             });
@@ -176,6 +193,3 @@
     </script>
 </body>
 </html>
-
-
-
