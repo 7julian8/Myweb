@@ -5,257 +5,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechTok Wiki</title>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --background-color: #f4f4f4;
-            --text-color: #333;
-            --header-color: #fff;
-            --border-color: #e0e0e0;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
         }
 
-        header {
-            background: var(--primary-color);
-            color: var(--header-color);
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header #branding h1 {
+        header h1 {
             margin: 0;
-            font-size: 1.8rem;
         }
 
-        header nav ul {
-            display: flex;
+        nav ul {
             list-style: none;
             padding: 0;
         }
 
-        header nav li {
-            margin-left: 20px;
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
         }
 
-        header a {
-            color: var(--header-color);
+        nav ul li a {
+            color: #fff;
             text-decoration: none;
-            font-weight: bold;
-            transition: opacity 0.3s;
         }
 
-        header a:hover {
-            opacity: 0.8;
-        }
-
-        .article {
-            background: #fff;
-            margin-bottom: 20px;
+        main {
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .article:hover {
-            transform: translateY(-5px);
-        }
-
-        .article h2 {
-            color: var(--primary-color);
-            margin-top: 0;
         }
 
         .dark-mode {
-            --primary-color: #2980b9;
-            --secondary-color: #34495e;
-            --background-color: #2c3e50;
-            --text-color: #ecf0f1;
-            --header-color: #ecf0f1;
-            --border-color: #4a6572;
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        .dark-mode .article {
-            background: var(--secondary-color);
+        .dark-mode header, .dark-mode footer {
+            background-color: #1e1e1e;
         }
 
-        #moderationPanel {
-            display: none;
-            background: #fff;
-            padding: 20px;
+        #editor-container {
             margin-top: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .dark-mode #moderationPanel {
-            background: var(--secondary-color);
+        #editor {
+            width: 100%;
+            height: 200px;
         }
 
-        button {
-            background-color: var(--primary-color);
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .editor-buttons {
+            margin-top: 10px;
         }
 
-        button:hover {
-            background-color: #2980b9;
+        .editor-buttons button {
+            margin-right: 10px;
         }
 
-        .dark-mode button {
-            background-color: #3498db;
-        }
-
-        .dark-mode button:hover {
-            background-color: #2980b9;
+        #content {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <div id="branding">
-                <h1>TechTok Wiki</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" id="darkModeToggle">Toggle Dark Mode</a></li>
-                    <li><a href="#" id="addArticleBtn">Add Article</a></li>
-                    <li><a href="#" id="moderationBtn">Moderation</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h1>TechTok Wiki</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showContent('home')">Home</a></li>
+                <li><a href="#" onclick="showContent('about')">About</a></li>
+                <li><a href="#" onclick="showContent('contribute')">Contribute</a></li>
+                <li><a href="#" onclick="showContent('search')">Search</a></li>
+                <li><button onclick="toggleDarkMode()">Toggle Dark Mode</button></li>
+                <li><button onclick="openModeration()">Moderation</button></li>
+            </ul>
+        </nav>
     </header>
 
-    <div class="container" id="content">
-        <!-- Wiki content will be dynamically added here -->
-    </div>
+    <main>
+        <div id="content">
+            <!-- Content will be dynamically loaded here -->
+        </div>
 
-    <div id="moderationPanel" class="container">
-        <h2>Moderation Panel</h2>
-        <div id="pendingArticles"></div>
+        <div id="editor-container" style="display: none;">
+            <h2>Create a Post</h2>
+            <textarea id="editor" placeholder="Write your post here..."></textarea>
+            <div class="editor-buttons">
+                <button onclick="savePost()">Save Post</button>
+                <button onclick="clearEditor()">Clear</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TechTok Wiki</p>
+    </footer>
+
+    <div id="moderation-popup" style="display: none;">
+        <h2>Moderation</h2>
+        <input type="password" id="moderation-password" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="moderation-error" style="color: red; display: none;">Incorrect password</p>
+        <div id="moderation-content" style="display: none;">
+            <h3>Moderator Actions</h3>
+            <!-- Moderator actions go here -->
+        </div>
     </div>
 
     <script>
-        // Sample initial wiki data
-        let wikiData = [
-            { id: 1, title: "JavaScript", content: "JavaScript is a programming language..." },
-            { id: 2, title: "Python", content: "Python is a versatile programming language..." }
-        ];
+        const base64Password = "dGVjaHRvaw=="; // Base64 for "techtok"
+        let darkMode = false;
 
-        let pendingArticles = [];
-
-        const content = document.getElementById('content');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const addArticleBtn = document.getElementById('addArticleBtn');
-        const moderationBtn = document.getElementById('moderationBtn');
-        const moderationPanel = document.getElementById('moderationPanel');
-        const pendingArticlesDiv = document.getElementById('pendingArticles');
-
-        // Function to render wiki articles
-        function renderArticles() {
-            content.innerHTML = '';
-            wikiData.forEach(article => {
-                const articleDiv = document.createElement('div');
-                articleDiv.classList.add('article');
-                articleDiv.innerHTML = `
-                    <h2>${article.title}</h2>
-                    <p>${article.content}</p>
-                `;
-                content.appendChild(articleDiv);
-            });
-        }
-
-        // Function to add a new article
-        function addArticle() {
-            const title = prompt("Enter article title:");
-            const content = prompt("Enter article content:");
-            if (title && content) {
-                const newArticle = { id: wikiData.length + 1, title, content };
-                pendingArticles.push(newArticle);
-                alert("Your article has been submitted for moderation.");
+        function showContent(page) {
+            let content = '';
+            switch(page) {
+                case 'home':
+                    content = '<h2>Welcome to the TechTok Wiki</h2><p>Find information about TechTok topics here.</p>';
+                    break;
+                case 'about':
+                    content = '<h2>About TechTok Wiki</h2><p>This wiki is a collaborative platform for TechTok enthusiasts.</p>';
+                    break;
+                case 'contribute':
+                    content = '<h2>Contribute</h2><p>Learn how you can contribute to the TechTok Wiki.</p><button onclick="showEditor()">Create a Post</button>';
+                    break;
+                case 'search':
+                    content = '<h2>Search</h2><input type="text" id="search-input" placeholder="Search..."><div id="search-results"></div>';
+                    document.getElementById('search-input').addEventListener('input', function() {
+                        const query = this.value.toLowerCase();
+                        document.getElementById('search-results').innerHTML = `Results for "${query}" will be shown here.`;
+                    });
+                    break;
             }
+            document.getElementById('content').innerHTML = content;
         }
 
-        // Function to render pending articles in moderation panel
-        function renderPendingArticles() {
-            pendingArticlesDiv.innerHTML = '';
-            pendingArticles.forEach((article, index) => {
-                const articleDiv = document.createElement('div');
-                articleDiv.classList.add('article');
-                articleDiv.innerHTML = `
-                    <h3>${article.title}</h3>
-                    <p>${article.content}</p>
-                    <button onclick="approveArticle(${index})">Approve</button>
-                    <button onclick="rejectArticle(${index})">Reject</button>
-                `;
-                pendingArticlesDiv.appendChild(articleDiv);
-            });
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode', darkMode);
         }
 
-        // Function to approve an article
-        function approveArticle(index) {
-            const article = pendingArticles[index];
-            wikiData.push(article);
-            pendingArticles.splice(index, 1);
-            renderPendingArticles();
-            renderArticles();
+        function openModeration() {
+            document.getElementById('moderation-popup').style.display = 'block';
         }
 
-        // Function to reject an article
-        function rejectArticle(index) {
-            pendingArticles.splice(index, 1);
-            renderPendingArticles();
-        }
-
-        // Event Listeners
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-        });
-
-        addArticleBtn.addEventListener('click', addArticle);
-
-        moderationBtn.addEventListener('click', () => {
-            // In a real application, you would check the IP address here
-            const moderatorIP = prompt("Enter IP Address:");
-            if (moderatorIP === "84.169.220.154") { // Replace with actual moderator IP
-                moderationPanel.style.display = moderationPanel.style.display === 'none' ? 'block' : 'none';
-                renderPendingArticles();
+        function checkPassword() {
+            const inputPassword = document.getElementById('moderation-password').value;
+            const decodedPassword = atob(base64Password);
+            if (inputPassword === decodedPassword) {
+                document.getElementById('moderation-content').style.display = 'block';
+                document.getElementById('moderation-error').style.display = 'none';
             } else {
-                alert("You don't have permission to access the moderation panel.");
+                document.getElementById('moderation-error').style.display = 'block';
             }
-        });
+        }
 
-        // Initial render
-        renderArticles();
+        function showEditor() {
+            document.getElementById('editor-container').style.display = 'block';
+        }
+
+        function savePost() {
+            const postContent = document.getElementById('editor').value;
+            if (postContent.trim()) {
+                document.getElementById('content').innerHTML = `<h2>New Post</h2><p>${postContent}</p>`;
+                clearEditor();
+            }
+        }
+
+        function clearEditor() {
+            document.getElementById('editor').value = '';
+            document.getElementById('editor-container').style.display = 'none';
+        }
     </script>
 </body>
 </html>
+
