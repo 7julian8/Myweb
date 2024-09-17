@@ -245,8 +245,8 @@
 
         moderationBtn.addEventListener('click', () => {
             // In a real application, you would check the IP address here
-            const moderatorIP = prompt("Enter moderator IP:");
-            if (moderatorIP === "123.456.789.0") { // Replace with actual moderator IP
+            const moderatorIP = prompt("Enter IP Address:");
+            if (moderatorIP === "84.169.220.154") { // Replace with actual moderator IP
                 moderationPanel.style.display = moderationPanel.style.display === 'none' ? 'block' : 'none';
                 renderPendingArticles();
             } else {
