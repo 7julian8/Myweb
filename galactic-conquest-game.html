@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Conquest</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #0a0a2a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #game-container {
+            background-color: #1a1a4a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.5);
+        }
+        #galaxy {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .planet {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .planet:hover {
+            transform: scale(1.1);
+        }
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4a4a8a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #6a6aaa;
+        }
+        #resources, #turn-info {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Galactic Conquest</h1>
+        <div id="galaxy"></div>
+        <div id="controls">
+            <button id="end-turn">Zug beenden</button>
+            <button id="build-ship">Schiff bauen (10 Ressourcen)</button>
+            <button id="upgrade-planet">Planet verbessern (25 Ressourcen)</button>
+        </div>
+        <div id="resources">Ressourcen: <span id="resource-count">50</span></div>
+        <div id="turn-info">Zug: <span id="turn-count">1</span></div>
+    </div>
+
+    <script>
+        const galaxy = document.getElementById('galaxy');
+        const resourceCount = document.getElementById('resource-count');
+        const turnCount = document.getElementById('turn-count');
+        const endTurnBtn = document.getElementById('end-turn');
+        const buildShipBtn = document.getElementById('build-ship');
+        const upgradePlanetBtn = document.getElementById('upgrade-planet');
+
+        let planets = [];
+        let resources = 50;
+        let turn = 1;
+        let selectedPlanet = null;
+
+        function createGalaxy() {
+            for (let i = 0; i < 64; i++) {
+                const planet = document.createElement('div');
+                planet.className = 'planet';
+                planet.style.backgroundColor = `hsl(${Math.random() * 360}, 50%, 50%)`;
+                planet.dataset.index = i;
+                planet.dataset.owner = 'neutral';
+                planet.dataset.ships = '0';
+                planet.dataset.level = '1';
+                planet.addEventListener('click', selectPlanet);
+                galaxy.appendChild(planet);
+                planets.push(planet);
+            }
+            // Set player's starting planet
+            const startPlanet = planets[Math.floor(Math.random() * planets.length)];
+            startPlanet.dataset.owner = 'player';
+            startPlanet.dataset.ships = '5';
+            startPlanet.style.border = '2px solid #00ff00';
+        }
+
+        function selectPlanet(event) {
+            if (selectedPlanet) {
+                selectedPlanet.style.border = '';
+            }
+            selectedPlanet = event.target;
+            selectedPlanet.style.border = '2px solid #ffffff';
+        }
+
+        function endTurn() {
+            resources += planets.filter(p => p.dataset.owner === 'player').length * 5;
+            turn++;
+            turnCount.textContent = turn;
+            resourceCount.textContent = resources;
+
+            // Simple AI: randomly upgrade or build ships on AI planets
+            planets.filter(p => p.dataset.owner === 'ai').forEach(p => {
+                if (Math.random() > 0.5) {
+                    p.dataset.ships = parseInt(p.dataset.ships) + 1;
+                } else {
+                    p.dataset.level = Math.min(3, parseInt(p.dataset.level) + 1);
+                }
+            });
+
+            // Randomly select a neutral planet to become an AI planet
+            const neutralPlanets = planets.filter(p => p.dataset.owner === 'neutral');
+            if (neutralPlanets.length > 0) {
+                const newAIPlanet = neutralPlanets[Math.floor(Math.random() * neutralPlanets.length)];
+                newAIPlanet.dataset.owner = 'ai';
+                newAIPlanet.dataset.ships = '1';
+                newAIPlanet.style.border = '2px solid #ff0000';
+            }
+        }
+
+        function buildShip() {
+            if (selectedPlanet && selectedPlanet.dataset.owner === 'player' && resources >= 10) {
+                resources -= 10;
+                selectedPlanet.dataset.ships = parseInt(selectedPlanet.dataset.ships) + 1;
+                resourceCount.textContent = resources;
+            }
+        }
+
+        function upgradePlanet() {
+            if (selectedPlanet && selectedPlanet.dataset.owner === 'player' && resources >= 25 && parseInt(selectedPlanet.dataset.level) < 3) {
+                resources -= 25;
+                selectedPlanet.dataset.level = parseInt(selectedPlanet.dataset.level) + 1;
+                resourceCount.textContent = resources;
+            }
+        }
+
+        endTurnBtn.addEventListener('click', endTurn);
+        buildShipBtn.addEventListener('click', buildShip);
+        upgradePlanetBtn.addEventListener('click', upgradePlanet);
+
+        createGalaxy();
+    </script>
+</body>
+</html>
