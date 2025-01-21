@@ -23,9 +23,14 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .banner {
-            background: url('https://via.placeholder.com/400x120') center/cover no-repeat;
+            background: #444; /* Placeholder background color */
             height: 120px;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 1.2rem;
         }
         .avatar {
             width: 80px;
@@ -35,6 +40,12 @@
             position: absolute;
             bottom: -40px;
             left: 20px;
+            background: #666; /* Placeholder background color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 1rem;
         }
         .content {
             padding: 20px;
@@ -78,12 +89,11 @@
 </head>
 <body>
     <div class="profile">
-        <div class="banner">
-            <img src="https://via.placeholder.com/80" alt="Avatar" class="avatar">
-        </div>
+        <div class="banner">Banner Placeholder</div>
+        <div class="avatar">Avatar</div>
         <div class="content">
             <div class="username">
-                <span>Đøüxx</span>
+                <span>Sigmatech</span>
                 <img src="https://twemoji.maxcdn.com/v/latest/svg/1f680.svg" alt="Rocket Emoji">
             </div>
             <div class="about">
