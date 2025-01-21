@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background: rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        header a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+        .hero a {
+            padding: 10px 20px;
+            background: #00adb5;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .hero a:hover {
+            background: #028b92;
+        }
+        section {
+            padding: 50px 10%;
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .project {
+            background: #1f4068;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .project img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .project h3 {
+            margin: 15px 0 10px;
+        }
+        .project p {
+            font-size: 1rem;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            color: #ccc;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #00adb5;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div><a href="#">Logo</a></div>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to My Portfolio</h1>
+        <p>Explore my work and projects below.</p>
+        <a href="#projects">View Projects</a>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="projects">
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Project 1">
+                <h3>Project 1</h3>
+                <p>Description of the project goes here.</p>
+            </div>
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Project 2">
+                <h3>Project 2</h3>
+                <p>Description of the project goes here.</p>
+            </div>
+            <div class="project">
+                <img src="https://via.placeholder.com/300" alt="Project 3">
+                <h3>Project 3</h3>
+                <p>Description of the project goes here.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Your Name. All rights reserved. <a href="#">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>
